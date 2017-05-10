@@ -5,7 +5,9 @@ import com.algaworks.cobranca.model.Titulo;
 import com.algaworks.cobranca.repository.Titulos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Array;
@@ -22,14 +24,14 @@ public class TituloController {
     @Autowired
     private Titulos titulos;
 
-    @GetMapping("/novo")
+    @RequestMapping("/novo")
     public ModelAndView novo(){
         ModelAndView modelAndView = new ModelAndView("CadastroTitulo");
         modelAndView.addObject("todosStatusTitulo", StatusTitulos.values());
         return modelAndView;
     }
 
-    @PostMapping
+    @RequestMapping(method = RequestMethod.POST)
     public ModelAndView salvar(Titulo titulo){
         titulos.save(titulo);
 
@@ -38,11 +40,9 @@ public class TituloController {
         return modelAndView;
     }
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView pesquisar(){
-        final List<Titulo> todosTitulos = titulos.findAll();
         ModelAndView modelAndView = new ModelAndView("PesquisaTitulos");
-        modelAndView.addObject("titulos", todosTitulos);
         return modelAndView;
     }
 
