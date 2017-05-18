@@ -5,6 +5,8 @@ import com.algaworks.cobranca.model.Titulo;
 import com.algaworks.cobranca.repository.Titulos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,15 +27,19 @@ public class TituloController {
     @GetMapping("/novo")
     public ModelAndView novo(){
         ModelAndView modelAndView = new ModelAndView("CadastroTitulo");
-        modelAndView.addObject("todosStatusTitulo", StatusTitulos.values());
+        modelAndView.addObject(new Titulo());
         return modelAndView;
     }
 
     @PostMapping
-    public ModelAndView salvar(Titulo titulo){
-        titulos.save(titulo);
+    public ModelAndView salvar(@Validated Titulo titulo, Errors errors){
+        final ModelAndView modelAndView = new ModelAndView("CadastroTitulo");
 
-        ModelAndView modelAndView = new ModelAndView("CadastroTitulo");
+        if(errors.hasErrors()){
+            return modelAndView;
+        }
+
+        titulos.save(titulo);
         modelAndView.addObject("mensagem", "Titulo salvo com sucesso");
         return modelAndView;
     }
